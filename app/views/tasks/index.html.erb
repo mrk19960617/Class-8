@@ -1,22 +1,26 @@
 <h1>Do the TODOs</h1>
 
-<form action="/tasks" method="post">
-  <input type="text" name="description">
-  <button>Add new task</button>
-</form>
+<% if session["user_id"] %>
+  <form action="/tasks" method="post">
+    <input type="text" name="description">
+    <button>Add new task</button>
+  </form>
+<% else %>
+  <p>You must <a href="/login">log in</a> to create tasks.</p>
+<% end %>
 
 <table>
-  <% for task in @tasks %>
+  <% @tasks.each do |task| %>
     <tr>
-      <td>
-        <%= task["description"] %>
-      </td>
-      <td>
-        <form action="/tasks/<%= task["id"] %>" method="post">
-          <input type="hidden" name="_method" value="delete">
-          <button>Complete</button>
-        </form>
-      </td>
+      <td><%= task["description"] %></td>
+      <% if session["user_id"] %>
+        <td>
+          <form action="/tasks/<%= task["id"] %>" method="post">
+            <input type="hidden" name="_method" value="delete">
+            <button>Complete</button>
+          </form>
+        </td>
+      <% end %>
     </tr>
   <% end %>
 </table>
