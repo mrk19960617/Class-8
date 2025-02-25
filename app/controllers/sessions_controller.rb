@@ -7,8 +7,8 @@ class SessionsController < ApplicationController
     # 1. Find the user by email
     @user = User.find_by(email: params[:email])
 
-    # 2. Check if the user exists and the password matches (plain text comparison)
-    if @user && @user.password == params[:password]
+    # 2. Check if the user exists and the password matches using BCrypt
+    if @user && BCrypt::Password.new(@user["password"]) == params["password"]
       # 3. Set session to log in the user
       session[:user_id] = @user.id
       flash[:notice] = "Welcome."
@@ -26,4 +26,3 @@ class SessionsController < ApplicationController
     redirect_to "/login"
   end
 end
-
