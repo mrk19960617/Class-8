@@ -11,6 +11,7 @@ class SessionsController < ApplicationController
     if @user && BCrypt::Password.new(@user["password"]) == params["password"]
       # 3. Set session to log in the user
       session[:user_id] = @user.id
+      cookies["name"] = "Cookie Monster"
       flash[:notice] = "Welcome."
       redirect_to "/companies"
     else
